@@ -12,7 +12,7 @@ To run this project, you will need:
 - Elixir (1.14 or later)
 - Erlang/OTP (25 or later)
 
-## Running the Game Locally
+# Running the Game Locally
 Clone the repository and navigate into the project directory.
 
 Install the Elixir dependencies:
