@@ -106,7 +106,7 @@
 
 @keyframes dropIn {
   from {
-    transform: translateY(calc(-1 * (6 - var(--row)) * 4rem));
+    transform: translateY(calc(-1 * (6 - var(--row)) * 115%));
   }
   to {
     transform: translateY(0);

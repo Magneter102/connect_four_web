@@ -166,7 +166,7 @@ defmodule ConnectFourWebWeb.Layouts do
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="forest"
       >
-        <.icon name="hero-" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-rocket-launch-micro" class="size-4 opacity-75 hover:opacity-100" />
       </button>
 
     </div>

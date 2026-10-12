@@ -122,7 +122,7 @@ defmodule ConnectFourWebWeb.GameLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="max-w-3xl mx-auto mt-10 text-center">
+    <div class="max-w-3xl mx-auto mt-10 text-center ">
       <%= if @room_found do %>
         <!-- ================= THE GAME BOARD ================= -->
         <h1 class="text-4xl font-bold mb-4">Room: <%= @room_id %></h1>
@@ -148,46 +148,49 @@ defmodule ConnectFourWebWeb.GameLive do
           <% end %>
           </div>
 
-          <div id="game-board" class="flex justify-center gap-2 bg-blue-600 p-4 rounded-lg shadow-xl w-max mx-auto">
-            <%= for {column, col_index} <- Enum.with_index(@game.board) do %>
+          <!-- FLUID BOARD WRAPPER -->
+          <div class="w-full max-w-3xl mx-auto px-2">
+            <div id="game-board" class="grid grid-cols-7 gap-1 sm:gap-2 bg-blue-600 p-2 sm:p-4 rounded-xl shadow-2xl">
+              <%= for {column, col_index} <- Enum.with_index(@game.board) do %>
 
-            <!-- 1. Add an ID to the column -->
-            <div
-              id={"column-#{col_index}"}
-              class={[
-                "flex flex-col-reverse justify-start gap-2 h-96 w-16 bg-blue-700 rounded py-2 transition",
-                @color in [:red, :yellow] && "cursor-pointer hover:bg-blue-500"
-              ]}
-              phx-click={if @color in [:red, :yellow], do: "drop_piece", else: nil}
-              phx-value-col={col_index}
-            >
+              <!-- 1. Add an ID to the column -->
+              <div
+                id={"column-#{col_index}"}
+                class={[
+                  "flex flex-col-reverse justify-start gap-1 sm:gap-2 w-full bg-blue-700 rounded py-1 sm:py-2 transition",
+                  @color in [:red, :yellow] && "cursor-pointer hover:bg-blue-500"
+                ]}
+                phx-click={if @color in [:red, :yellow], do: "drop_piece", else: nil}
+                phx-value-col={col_index}
+              >
 
-              <!-- 2. Pattern match {piece_color, row_index} directly in the loop -->
-              <%= for {piece_color, row_index} <- Enum.with_index(column) do %>
-                <div
-                  id={"piece-#{col_index}-#{row_index}"}
-                  style={"--row: #{row_index};"}
-                  class={[
-                    "w-14 h-14 mx-auto rounded-full shrink-0",
-                    if(piece_color == :red, do: "bg-red-500", else: "bg-yellow-400"),
-                    if(row_index == length(column) - 1, do: "animate_drop_in", else: ""),
-                    case @game.status do
-                      {:won, _, winning_coords} -> if({col_index, row_index} in winning_coords, do: "winning-piece", else: "")
-                      _ -> ""
-                    end
-                    ]}
-                ></div>
-              <% end %>
-
-              <!-- 3. Add an ID to the empty slots and calculate their row index -->
-              <%= for row_index <- length(column)..5//1 do %>
-                <%= if row_index < 6 do %>
-                  <div id={"empty-#{col_index}-#{row_index}"} class="w-14 h-14 mx-auto rounded-full bg-blue-800 shrink-0"></div>
+                <!-- 2. Pattern match {piece_color, row_index} directly in the loop -->
+                <%= for {piece_color, row_index} <- Enum.with_index(column) do %>
+                  <div
+                    id={"piece-#{col_index}-#{row_index}"}
+                    style={"--row: #{row_index};"}
+                    class={[
+                      "w-full aspect-square mx-auto rounded-full shrink-0 shadow-md",
+                      if(piece_color == :red, do: "bg-red-500", else: "bg-yellow-400"),
+                      if(row_index == length(column) - 1, do: "animate_drop_in", else: ""),
+                      case @game.status do
+                        {:won, _, winning_coords} -> if({col_index, row_index} in winning_coords, do: "winning-piece", else: "")
+                        _ -> ""
+                      end
+                      ]}
+                  ></div>
                 <% end %>
-              <% end %>
 
+                <!-- 3. Add an ID to the empty slots and calculate their row index -->
+                <%= for row_index <- length(column)..5//1 do %>
+                  <%= if row_index < 6 do %>
+                    <div id={"empty-#{col_index}-#{row_index}"} class="w-full aspect-square mx-auto rounded-full bg-blue-800/80 shadow-inner shrink-0"></div>
+                  <% end %>
+                <% end %>
+
+              </div>
+            <% end %>
             </div>
-          <% end %>
           </div>
 
         <% else %>
@@ -198,17 +201,27 @@ defmodule ConnectFourWebWeb.GameLive do
 
       <% else %>
         <!-- ================= ROOM NOT FOUND ERROR ================= -->
-        <div class="bg-white p-10 rounded-xl shadow-lg border border-gray-100 max-w-md mx-auto mt-20">
 
-          <h1 class="text-3xl font-bold text-gray-800 mb-2">Room Not Found</h1>
-          <p class="text-gray-500 mb-8">
-            The room <span class="font-bold text-gray-800"><%= @room_id %></span> does not exist, or the game has already ended.
-          </p>
 
-          <.link navigate="/" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition shadow-md w-full inline-block">
-            Back to Lobby
-          </.link>
-        </div>
+          <div class="card w-full max-w-md bg-base-100 shadow-xl mx-auto mt-20">
+            <div class="card-body items-center text-center">
+
+              <h2 class="card-title text-error text-3xl mb-2">Room Not Found</h2>
+
+              <p class="text-base-content/80 mb-6">
+                The room <span class="font-bold text-base-content"><%= @room_id %></span> does not exist, or the game has already ended.
+              </p>
+
+              <div class="card-actions w-full mt-2">
+                <.link navigate="/" class="btn btn-primary w-full text-lg">
+                  Back to Lobby
+                </.link>
+              </div>
+
+            </div>
+          </div>
+
+
       <% end %>
     </div>
     """
