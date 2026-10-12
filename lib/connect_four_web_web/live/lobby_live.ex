@@ -44,46 +44,43 @@ defmodule ConnectFourWebWeb.LobbyLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="max-w-md mx-auto mt-20 text-center">
-      <h1 class="text-6xl font-extrabold mb-10 text-blue-700 tracking-tight">
-        Connect Four
-      </h1>
+    <div class="min-h-screen bg-base-200 flex items-center justify-center p-4">
+      <div class="flex flex-col gap-6 w-full max-w-sm">
 
-      <!-- Create Room Section -->
-      <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Start a New Match</h2>
-        <p class="text-gray-500 mb-6">Generate a random room code and invite a friend.</p>
+        <div class="card bg-base-100 shadow-xl flex-1">
+          <div class="card-body items-center text-center flex flex-col justify-between">
+            <h2 class="card-title text-primary text-2xl mb-2">Create Match</h2>
+            <p class="text-base-content/80">Start a fresh game and get a room code to share with a friend.</p>
 
-        <button
-          phx-click="create_room"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg"
-        >
-          Create Room
-        </button>
-      </div>
+            <div class="card-actions mt-6">
+              <button phx-click="create_room" class="btn btn-primary w-full text-lg">
+                Create New Room
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <!-- Join Room Section -->
-      <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Join Existing Match</h2>
-        <p class="text-gray-500 mb-6">Have a code from a friend? Enter it below.</p>
+        <div class="card bg-base-100 shadow-xl flex-1">
+          <div class="card-body items-center text-center flex flex-col justify-between">
 
-        <.form for={@form} phx-submit="join_room" class="flex gap-2">
-          <input
-            type="text"
-            name="room_id"
-            placeholder="e.g. ABCD"
-            class="flex-1 rounded-lg border-gray-300 px-4 py-3 uppercase focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-bold tracking-widest text-center"
-            required
-            autocomplete="off"
-            maxlength="10"
-          />
-          <button
-            type="submit"
-            class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg"
-          >
-            Join
-          </button>
-        </.form>
+            <h2 class="card-title text-primary text-2xl mb-2">Join Room</h2>
+            <p class="text-base-content/80">Already have a room code? Enter it below to join the match.</p>
+
+            <form phx-submit="join_room" class="form-control flex flex-col w-full mt-6 gap-2">
+              <input
+                type="text"
+                name="room_id"
+                placeholder="Room Code"
+                class="input input-bordered w-full uppercase"
+                autocomplete="off"
+              />
+              <button type="submit" class="btn btn-primary w-full text-lg">
+                Join Game
+              </button>
+            </form>
+          </div>
+        </div>
+
       </div>
     </div>
     """
